@@ -37,7 +37,7 @@ private:
 
 public:
     virtual void start();
-    virtual void init();
+    virtual void init(const string& strategy_config);
     virtual void on_market_bar(const BarMdMap& data, int min_interval, short source, long rcv_time);
     virtual void on_market_data(const LFMarketDataField* data, short source, long rcv_time);
     virtual void on_rtn_order(const LFRtnOrderField* data, int request_id, short source, long rcv_time);

@@ -63,7 +63,7 @@ public:
      * by calling add_* functions in WCDataWrapper
      * also subscribe tickers
      */
-    virtual void init() = 0;
+    virtual void init(const string& strategy_config) = 0;
 
 public: // util functions, wrap upon WCStrategyUtil
     /** insert order, check status before calling WCStrategyUtil */
