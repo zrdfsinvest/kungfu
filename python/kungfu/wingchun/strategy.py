@@ -48,7 +48,7 @@ class Strategy:
         return module
 
     def run(self):
-        self.strategy.init()
+        self.strategy.init("band_demo.json")
         self.strategy.start()
         self.strategy.block()
 
