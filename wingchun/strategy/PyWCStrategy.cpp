@@ -176,13 +176,13 @@ BOOST_PYTHON_MODULE(libwingchunstrategy)
 {
     bp::class_<WCDataWrapper, WCDataWrapperPtr>("DataWrapper", bp::no_init)
     .def("stop", &WCDataWrapper::stop)
+    .def("disable_auto_sub_mode", &WCDataWrapper::disable_auto_sub_mode)
     .def("add_market_data", &WCDataWrapper::add_market_data, (bp::arg("source")))
     .def("add_trade_engine", &WCDataWrapper::add_register_td, (bp::arg("source")))
     .def("set_pos", &WCDataWrapper::set_pos, (bp::arg("pos_handler"), bp::arg("source")))
     .def("get_pos", &WCDataWrapper::get_pos, (bp::arg("source")))
     .def("get_ticker_pnl", &WCDataWrapper::get_ticker_pnl, (bp::arg("source"), bp::arg("ticker"), bp::arg("include_fee")=false))
-    .def("register_bar_md", &WCDataWrapper::register_bar_md, (bp::arg("source"), bp::arg("min_interval"), bp::arg("start_time"), bp::arg("end_time")))
-    .def("disable_auto_sub_mode", &WCDataWrapper::disable_auto_sub_mode);
+    .def("register_bar_md", &WCDataWrapper::register_bar_md, (bp::arg("source"), bp::arg("min_interval"), bp::arg("start_time"), bp::arg("end_time")));
 
     bp::class_<PyWCStrategy, PyWCStrategyPtr>("Strategy")
     .def(bp::init<string>(bp::arg("name")))
