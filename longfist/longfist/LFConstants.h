@@ -8,6 +8,7 @@
 #include <stdio.h>
 // Index for Sources...
 const short SOURCE_CTP = 1;
+const short SOURCE_SIMU = 2;
 const short SOURCE_XTP = 15;
 
 // Exchange names

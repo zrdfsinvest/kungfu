@@ -71,6 +71,8 @@
 #define WC_CONFIG_KEY_MCAST_ADDRESS     "McastAddress"
 #define WC_CONFIG_KEY_NIC               "Nic"
 #define WC_CONFIG_KEY_PROTOCOL_INFO     "ProtocolInfo"
+#define WC_CONFIG_KEY_BACKTEST_DATE     "BacktestDate"
+#define WC_CONFIG_KEY_TICKDATA_PATH     "TickdataPath"
 
 
 WC_NAMESPACE_START
