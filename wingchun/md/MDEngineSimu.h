@@ -19,9 +19,9 @@ public:
     /** load internal information from config json */
     virtual void load(const json& j_config);
     virtual void connect(long timeout_nsec);
-    //virtual void login(long timeout_nsec);
-    //virtual void logout();
-    //virtual void release_api();
+    virtual void login(long timeout_nsec);
+    virtual void logout();
+    virtual void release_api();
     virtual void subscribeMarketData(const vector<string>& instruments, const vector<string>& markets);
     virtual bool is_connected() const { return connected; };
     virtual bool is_logged_in() const { return logged_in; };

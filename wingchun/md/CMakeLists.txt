@@ -24,3 +24,8 @@ SET(XTP_SOURCE_FILES MDEngineXTP.cpp MDEngineXTP.h IMDEngine.cpp IMDEngine.h ../
 ADD_LIBRARY(xtpmd SHARED ${XTP_SOURCE_FILES})
 TARGET_LINK_LIBRARIES(xtpmd journal kflog xtpquoteapi ${Boost_LIBRARIES})
 INSTALL(TARGETS xtpmd DESTINATION "lib/wingchun")
+
+SET(SIMU_SOURCE_FILES MDEngineSimu.cpp MDEngineSimu.h IMDEngine.cpp IMDEngine.h ../base/IEngine.cpp ../base/IEngine.h)
+ADD_LIBRARY(simumd SHARED ${SIMU_SOURCE_FILES})
+TARGET_LINK_LIBRARIES(simumd journal kflog ${Boost_LIBRARIES})
+INSTALL(TARGETS simumd DESTINATION "lib/wingchun")
