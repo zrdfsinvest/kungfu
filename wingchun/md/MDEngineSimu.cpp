@@ -9,6 +9,9 @@
 #include "TypeConvert.hpp"
 #include "Timer.h"
 #include "longfist/LFUtils.h"
+#include <boost/algorithm/string.hpp>
+#include <boost/lexical_cast.hpp>
+#include  <fstream>
 
 USING_WC_NAMESPACE
 
@@ -53,6 +56,38 @@ void MDEngineSimu::subscribeMarketData(const vector<string>& instruments, const 
     for (int i = 0; i < nCount; i++)
         insts[i] = (char*)instruments[i].c_str();
     //api->SubscribeMarketData(insts, nCount);
+    readTickQuotes();
+}
+
+void MDEngineSimu::readTickQuotes()
+{
+    string tickdata_file = tickdata_path + backtest_date + "_night";
+    KF_LOG_INFO(logger, "[MDEngineSimu]" << " (readTickQuotes)" << tickdata_file);
+    std::ifstream tick_file(tickdata_file);
+    string line;
+    while(std::getline(tick_file,line))
+    {
+        //l1810,9250.000000,9135.000000,2,9410.000000,1,0,12.000000,0.000000,90015297,90015138
+        KF_LOG_INFO(logger, "[MDEngineSimu]" << " (readTickQuotes)" << line);
+        struct LFMarketDataField data = {};
+
+        vector <string> fields;
+        boost::split( fields, line, boost::is_any_of( "," ) );
+        memcpy(data.InstrumentID,fields[0].c_str(), 31);
+        data.LastPrice = boost::lexical_cast<double>(fields[1]);
+        data.BidPrice1 = boost::lexical_cast<double>(fields[2]);
+        data.BidVolume1 = boost::lexical_cast<int>(fields[3]);
+        data.AskPrice1 = boost::lexical_cast<double>(fields[4]);
+        data.AskVolume1 = boost::lexical_cast<int>(fields[5]);
+        data.Volume = boost::lexical_cast<int>(fields[6]);
+        data.OpenInterest = boost::lexical_cast<double>(fields[7]);
+        data.Turnover = boost::lexical_cast<double>(fields[8]);
+        int nLen = fields[10].length();
+        memcpy(data.UpdateTime, (const void*)fields[10].substr(0,nLen-3).c_str(), 9);
+        data.UpdateMillisec = boost::lexical_cast<int>(fields[10].substr(nLen-3,3));
+
+        on_market_data(&data); 
+    }  
 }
 
 BOOST_PYTHON_MODULE(libsimumd)

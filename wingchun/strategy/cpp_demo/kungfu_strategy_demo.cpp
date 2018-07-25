@@ -11,8 +11,8 @@
 
 USING_WC_NAMESPACE
 
-#define SOURCE_INDEX SOURCE_CTP
-#define M_TICKER "rb1801"
+#define SOURCE_INDEX SOURCE_SIMU
+#define M_TICKER "rb1810"
 #define M_EXCHANGE EXCHANGE_SHFE
 #define TRADED_VOLUME_LIMIT 500
 
@@ -39,7 +39,7 @@ protected:
     int traded_volume;
     Signal signal;
 public:
-    virtual void init();
+    virtual void init(const string& json_config);
     virtual void on_market_data(const LFMarketDataField* data, short source, long rcv_time);
     virtual void on_rsp_position(const PosHandlerPtr posMap, int request_id, short source, long rcv_time);
     virtual void on_rtn_trade(const LFRtnTradeField* data, int request_id, short source, long rcv_time);
@@ -62,10 +62,10 @@ Strategy::Strategy(const string& name): IWCStrategy(name)
     rid = -1;
 }
 
-void Strategy::init()
+void Strategy::init(const string& json_config)
 {
     data->add_market_data(SOURCE_INDEX);
-    data->add_register_td(SOURCE_INDEX);
+    //data->add_register_td(SOURCE_INDEX);
     vector<string> tickers;
     tickers.push_back(M_TICKER);
     util->subscribeMarketData(tickers, SOURCE_INDEX);
@@ -107,8 +107,9 @@ void Strategy::on_rsp_position(const PosHandlerPtr posMap, int request_id, short
 
 void Strategy::on_market_data(const LFMarketDataField* md, short source, long rcv_time)
 {
-    if (strcmp(M_TICKER, md->InstrumentID) == 0 && td_connected)
+    if (strcmp(M_TICKER, md->InstrumentID) == 0 )//&& td_connected
     {
+        KF_LOG_INFO(logger, "on_market_data: "<<md->InstrumentID<<md->LastPrice);
         signal.TickPrice.push_back(md->LastPrice);
         if (signal.TickPrice.size() > signal.look_back)
             signal.TickPrice.pop_front();
@@ -213,9 +214,9 @@ void Strategy::on_rsp_order(const LFInputOrderField* order, int request_id, shor
 
 int main(int argc, const char* argv[])
 {
-    Strategy str(string("cpp_test"));
-    str.init();
-    str.start();
-    str.block();
+    Strategy demo_algo("cpp_test");
+    demo_algo.init("demo.json");
+    demo_algo.start();
+    demo_algo.block();
     return 0;
 }

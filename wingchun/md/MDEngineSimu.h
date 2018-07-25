@@ -23,6 +23,7 @@ public:
     virtual void logout();
     virtual void release_api();
     virtual void subscribeMarketData(const vector<string>& instruments, const vector<string>& markets);
+    virtual void readTickQuotes();
     virtual bool is_connected() const { return connected; };
     virtual bool is_logged_in() const { return logged_in; };
     virtual string name() const { return "MDEngineSimu"; };
