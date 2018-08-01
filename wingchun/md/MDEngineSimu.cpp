@@ -61,13 +61,14 @@ void MDEngineSimu::subscribeMarketData(const vector<string>& instruments, const 
 
 void MDEngineSimu::readTickQuotes()
 {
-    string tickdata_file = tickdata_path + backtest_date + "_night";
+    string tickdata_file = tickdata_path + backtest_date;
     KF_LOG_INFO(logger, "[MDEngineSimu]" << " (readTickQuotes)" << tickdata_file);
     std::ifstream tick_file(tickdata_file);
     string line;
     while(std::getline(tick_file,line))
     {
         //l1810,9250.000000,9135.000000,2,9410.000000,1,0,12.000000,0.000000,90015297,90015138
+        //symbol,lastprice bidprice1 bidvolume1 askprice1 askvolume1 volume openinterest time
         KF_LOG_INFO(logger, "[MDEngineSimu]" << " (readTickQuotes)" << line);
         struct LFMarketDataField data = {};
 
@@ -76,16 +77,14 @@ void MDEngineSimu::readTickQuotes()
         memcpy(data.InstrumentID,fields[0].c_str(), 31);
         data.LastPrice = boost::lexical_cast<double>(fields[1]);
         data.BidPrice1 = boost::lexical_cast<double>(fields[2]);
-        data.BidVolume1 = boost::lexical_cast<int>(fields[3]);
+        data.BidVolume1 = (int)boost::lexical_cast<double>(fields[3]);
         data.AskPrice1 = boost::lexical_cast<double>(fields[4]);
-        data.AskVolume1 = boost::lexical_cast<int>(fields[5]);
-        data.Volume = boost::lexical_cast<int>(fields[6]);
+        data.AskVolume1 = (int)boost::lexical_cast<double>(fields[5]);
+        data.Volume = (int)boost::lexical_cast<double>(fields[6]);
         data.OpenInterest = boost::lexical_cast<double>(fields[7]);
-        data.Turnover = boost::lexical_cast<double>(fields[8]);
-        int nLen = fields[10].length();
-        memcpy(data.UpdateTime, (const void*)fields[10].substr(0,nLen-3).c_str(), 9);
-        data.UpdateMillisec = boost::lexical_cast<int>(fields[10].substr(nLen-3,3));
-
+        int nLen = fields[8].length();
+        memcpy(data.UpdateTime, (const void*)fields[8].substr(0,nLen-3).c_str(), 9);
+        data.UpdateMillisec = boost::lexical_cast<int>(fields[8].substr(nLen-3,3));
         on_market_data(&data); 
     }  
 }
